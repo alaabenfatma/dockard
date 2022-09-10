@@ -26,7 +26,7 @@ export class FlowCreator {
             id: 'init',
             sourcePosition: 'right',
             data: { label: 'docker-compose' },
-            position: { x: 0, y: 0 },
+            position: { x: 0, y: num_services * 50 + 50 },
         };
         this.nodes.push(init_node);
         // Create a node for each service
@@ -42,7 +42,7 @@ export class FlowCreator {
                 sourcePosition: 'right',
                 targetPosition: 'left',
                 data: { label: id },
-                position: { x: this.nodes.length * 200, y: this.nodes.length * 100 },
+                position: { x: 200, y: this.nodes.length * 100 },
             };
             this.nodes.push(node);
         }
