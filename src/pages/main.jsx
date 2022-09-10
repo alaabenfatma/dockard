@@ -18,9 +18,14 @@ export default function Main() {
 
     useEffect(() => {
 
-
+        let jsonCode;
         // Load only valid yaml files
-        let jsonCode = yaml.load(code);
+        try {
+            jsonCode = yaml.load(code);
+        } catch (error) {
+            return;
+        }
+        
         if (jsonCode && jsonCode !== null && jsonCode !== undefined
             && typeof jsonCode !== 'string') {
             let flowCreator = new FlowCreator(jsonCode);
