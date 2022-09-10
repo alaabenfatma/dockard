@@ -28,7 +28,7 @@ export default function Main() {
         }
     }, [code]);
     useEffect(() => {
-        if (flowCreatorInstance) { 
+        if (flowCreatorInstance) {
             let data = flowCreatorInstance.createFlow();
             setNodes(data.nodes);
             setEdges(data.edges);
@@ -45,7 +45,7 @@ export default function Main() {
         }}>
             <div >
                 <Editor
-                    height="90vh"
+                    height="100vh"
                     defaultLanguage="yaml"
                     defaultValue={code}
                     theme='vs'
@@ -54,7 +54,7 @@ export default function Main() {
                     }}
                 />
             </div>
-            <div style={{ width: '100%', height: '600px' }}>
+            <div style={{ width: '100vh', height: '100vh' }}>
                 <ReactFlow
                     nodes={nodes}
                     edges={edges}
@@ -63,7 +63,7 @@ export default function Main() {
                     onConnect={onConnect}
                     fitView
                     attributionPosition="bottom-left"
-                    style={{ width: '600px', height: '600px' }}
+                    style={{ width: '100vh', height: '100vh' }}
                     nodesDraggable={true}
                 >
                     <MiniMap
