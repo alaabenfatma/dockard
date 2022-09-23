@@ -1,21 +1,22 @@
 import { React, useState, useEffect, useCallback } from 'react';
-import ReactDOM from "react-dom";
-
 import { SplitPane } from "react-collapse-pane";
 
 import Editor from "@monaco-editor/react";
 import ReactFlow, { useNodesState, useEdgesState, addEdge, isNode, MiniMap, Controls } from 'react-flow-renderer';
 import yaml from 'js-yaml';
 import { FlowCreator } from '../controllers/flowCreator';
-import { type } from '@testing-library/user-event/dist/type';
+
 export default function Main() {
     const [code, setCode] = useState("# Input your docker-compose file here");
-    const [flowCreatorInstance, setFlowCreatorInstance] = useState(null);
+    const [flowCreatorInstance, setFlowCreatorInstance] = useState(new FlowCreator());
 
     const [nodes, setNodes, onNodesChange] = useNodesState([]);
     const [edges, setEdges, onEdgesChange] = useEdgesState([]);
     const onConnect = useCallback((params) => setEdges((els) => addEdge(params, els)), []);
 
+    let errorNode = () => {
+        return flowCreatorInstance.createErrorNode('Error parsing docker-compose file, please check your syntax');
+    }
     useEffect(() => {
 
         let jsonCode;
@@ -23,21 +24,40 @@ export default function Main() {
         try {
             jsonCode = yaml.load(code);
         } catch (error) {
-            return;
+            console.log(error);
+            setNodes([
+                errorNode()
+            ]);
         }
-        
+
         if (jsonCode && jsonCode !== null && jsonCode !== undefined
             && typeof jsonCode !== 'string') {
             let flowCreator = new FlowCreator(jsonCode);
             setFlowCreatorInstance(flowCreator);
         }
     }, [code]);
+
     useEffect(() => {
         if (flowCreatorInstance) {
-            let data = flowCreatorInstance.createFlow();
-            setNodes(data.nodes);
-            setEdges(data.edges);
-            console.log(data.edges)
+            let data;
+            try {
+                data = flowCreatorInstance.createFlow();
+            }
+            catch (error) {
+                console.log(error);
+            }
+
+            if (data) {
+                setNodes(data.nodes);
+                setEdges(data.edges);
+            }
+            else {
+                setNodes([
+                    errorNode()
+                ]);
+                setEdges([]);
+                console.log("No data");
+            }
         }
     }, [flowCreatorInstance]);
 
@@ -59,17 +79,18 @@ export default function Main() {
                     }}
                 />
             </div>
-            <div style={{ width: '100vh', height: '100vh' }}>
+            <div style={{ width: '100%', height: '100vh' }}>
                 <ReactFlow
                     nodes={nodes}
                     edges={edges}
                     onNodesChange={onNodesChange}
                     onEdgesChange={onEdgesChange}
                     onConnect={onConnect}
-                    fitView
+                    fitView={true}
                     attributionPosition="bottom-left"
-                    style={{ width: '100vh', height: '100vh' }}
+                    style={{ width: '100%', height: '100vh' }}
                     nodesDraggable={true}
+                    onNodeClick={(event, node) => console.log(node)}
                 >
                     <MiniMap
                         nodeStrokeColor={(n) => {
