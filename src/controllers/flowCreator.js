@@ -5,7 +5,17 @@ export class FlowCreator {
     }
 
 
-
+    _nodeStyle(color) {
+        return {
+            borderRadius: '5px',
+            background: color,
+            color: 'black',
+            width: 'max-content',
+            height: 'max-content',
+            boxShadow: '10 10 10px #add2ecc2',
+            border: '1px solid #add2ecc2'
+        };
+    }
     createFlow() {
         console.log(Object.keys(this.json_data));
         if (this.json_data === undefined || this.json_data === null
@@ -38,13 +48,26 @@ export class FlowCreator {
         this.nodes.push(init_node);
         // Create a node for each service
         for (let i = 0; i < num_services; i++) {
-            let service, id, name, ports, volumes, depends_on;
+            let service, id, name, ports, volumes, depends_on, image, build, command, environment, labels, networks, restart, stdin_open, tty, user, working_dir;
             try {
                 service = services_array[i];
                 id = Object.keys(services)[i];
                 name = service["name"] === (undefined || null) ? id : service["name"];
                 ports = service["ports"] === (undefined || null) ? [] : service["ports"];
                 depends_on = service["depends_on"] === (undefined || null) ? [] : service["depends_on"];
+                volumes = service["volumes"] === (undefined || null) ? [] : service["volumes"];
+                image = service["image"] === (undefined || null) ? "" : service["image"];
+                build = service["build"] === (undefined || null) ? "" : service["build"];
+                command = service["command"] === (undefined || null) ? "" : service["command"];
+                environment = service["environment"] === (undefined || null) ? [] : service["environment"];
+                labels = service["labels"] === (undefined || null) ? [] : service["labels"];
+                networks = service["networks"] === (undefined || null) ? [] : service["networks"];
+                restart = service["restart"] === (undefined || null) ? "" : service["restart"];
+                stdin_open = service["stdin_open"] === (undefined || null) ? "" : service["stdin_open"];
+                tty = service["tty"] === (undefined || null) ? "" : service["tty"];
+                user = service["user"] === (undefined || null) ? "" : service["user"];
+                working_dir = service["working_dir"] === (undefined || null) ? "" : service["working_dir"];
+
             }
             catch (err) {
                 console.log(err);
@@ -56,35 +79,44 @@ export class FlowCreator {
                 sourcePosition: 'right',
                 targetPosition: 'left',
                 data: {
-                    label: id,
-                    ports: ports,
+                    label:
+                        <span style={{ alignItems: 'center' }}>
+                            <p style={{
+                                position: 'relative',
+                            }}><img src="https://img.icons8.com/doodle/96/000000/docker.png"
+                                style={{ width: "24px", height: "24px" }} />
+                                <div><strong>{id}</strong></div></p>
+                        </span>
                 },
-                ports: ports,
                 position: { x: 200, y: this.nodes.length * 100 },
+
+                style: this._nodeStyle('#add2ecc2'),
             };
-            if (ports.length > 0) {
+            this.nodes.push(node);
+            let thisNodesPosition = {
+                x: 200,
+                y: this.nodes.length * 100,
+            }
+
+            // Create 'ports' node
+            if (ports !== undefined && ports !== null && ports.length > 0) {
                 let ports_node = {
                     id: id + '_ports',
                     sourcePosition: 'right',
                     targetPosition: 'left',
                     data: {
+                        type: 'ports',
                         label:
                             <>
-                                <img src='https://www.svgrepo.com/show/292040/usb-port.svg' alt="port" width="20" height="20" />
-                                <p>Ports</p>
-                                {ports.map(port => {
-                                    return (
-                                        <>
-                                            <p>{port}</p>
-                                        </>
-                                    )
-                                })}
+                                {<p>{ports.length} ports mapping</p>}
                             </>
-
                     },
-                    style: { background: '#c52b2b', onmouseenter: 'background = "#cf5858"' },
 
-                    position: { x: 400, y: this.nodes.length * 100 },
+                    position: {
+                        x: thisNodesPosition.x + 200,
+                        y: thisNodesPosition.y,
+                    },
+                    style: this._nodeStyle('#b9defcc2'),
                 };
                 this.nodes.push(ports_node);
                 this.edges.push({
@@ -93,14 +125,64 @@ export class FlowCreator {
                     target: id + '_ports',
                 });
             }
-            this.nodes.push(node);
+
+            // Create 'environment' node: A simple green node showing the count of environment variables
+
+            // Convert environment variables to an array
+            if (environment !== undefined && environment !== null) {
+                let environment_array = Object.values(environment);
+                let environment_node = {
+                    id: id + '_environment',
+                    sourcePosition: 'right',
+                    targetPosition: 'left',
+                    data: {
+                        type: 'environment',
+                        label:
+                            <span>
+                                {<p>{environment_array.length} environment variables</p>}
+                            </span>
+                    },
+                    variables: environment,
+                    style: this._nodeStyle('#b9defcc2'),
+                    position: { x: thisNodesPosition.x + 200, y: thisNodesPosition.y + 100 },
+
+                };
+                this.nodes.push(environment_node);
+                this.edges.push({
+                    id: id + '_environment_edge',
+                    source: id,
+                    target: id + '_environment',
+                });
+
+                
+            }
+            // Create the dependency edges between the nodes
+            console.log(depends_on);
+            if (depends_on !== undefined && depends_on !== null) {
+                let dependencies = Object.values(depends_on);
+                dependencies.forEach(dependency => {
+                    console.log(dependency);
+                    this.edges.push({
+                        id: id + '_' + dependency + '_edge',
+                        source: id,
+                        target: dependency,
+                        animated: true,
+                        style: { stroke: '#03d1f5c2' },
+                        markerEnd: { type: 'arrow', color: '#03d1f5c2' },
+                        label: 'depends_on',
+                        sourceHandle: 'right',
+                    });
+                });
+
+            }
+
         }
 
 
         // Create edges with init node for each service
         for (let i = 0; i < this.nodes.length; i++) {
-            if (this.nodes[i].id.indexOf('_ports') !== -1) {
-                console.log(`Skipping ${this.nodes[i].id}`);
+            if (this.nodes[i].id.indexOf('_') !== -1) {
+                //console.log(`Skipping ${this.nodes[i].id}`);
                 continue;
             }
             let edge = {
@@ -126,15 +208,16 @@ export class FlowCreator {
             targetPosition: null,
             data: {
                 label:
-                    <> 
+                    <>
                         <img src="https://img.icons8.com/bubbles/100/000000/error.png"
                             alt="error" width="64" height="64" />
                         <p>{message}</p>
                     </>
 
             },
-            style: { 
-                background: "white", onmouseenter: 'background = "#cf5858"' },
+            style: {
+                background: "white", onmouseenter: 'background = "#cf5858"'
+            },
 
             position: { x: 0, y: 0 },
         };

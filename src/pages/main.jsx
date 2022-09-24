@@ -67,10 +67,17 @@ export default function Main() {
         <SplitPane split="vertical" collapse={true} style={{
             width: "100%",
             height: "100%",
-        }}>
-            <div >
+        }}
+
+        >
+            <div style={{
+                width: "100%",
+                height: "100%",
+                overflow: "auto",
+            }}>
                 <Editor
                     height="100vh"
+                    width={"100%"}
                     defaultLanguage="yaml"
                     defaultValue={code}
                     theme='vs'
@@ -107,6 +114,7 @@ export default function Main() {
                 </ReactFlow>
 
             </div>
+
         </SplitPane>
     )
 }
