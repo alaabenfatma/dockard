@@ -47,3 +47,18 @@ test('Test basic edges hello world docker-compose yaml file', () => {
   let flow = flowCreator.createFlow();
   expect(flow.edges).toEqual(expected_edges);
 });
+
+// Test the _nodeStyle function
+test('Test the _nodeStyle function', () => {
+  let flowCreator = new FlowCreator({});
+  let expected_nodeStyle = {
+    borderRadius: '5px',
+    background: '#add2ecc2',
+    color: 'black',
+    width: 'max-content',
+    height: 'max-content',
+    boxShadow: '10 10 10px #add2ecc2',
+    border: '1px solid #add2ecc2'
+  }
+  expect(flowCreator._nodeStyle('#add2ecc2')).toEqual(expected_nodeStyle);
+});
