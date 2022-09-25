@@ -81,17 +81,17 @@ services:
     return (
         <SplitPane split="vertical" collapse={true} style={{
             width: "100%",
-            height: "100%",
+           
         }}
 
         >
             <div style={{
                 width: "100%",
                 height: "100%",
+                top: "65px",
+                position: "absolute",
             }}>
                 <Editor
-                    height="100%"
-                    width={"100%"}
                     defaultLanguage="yaml"
                     defaultValue={code}
                     theme='vs'
@@ -110,7 +110,6 @@ services:
                     onConnect={onConnect}
                     fitView={true}
                     attributionPosition="bottom-left"
-                    style={{ width: '100%', height: '100%' }}
                     nodesDraggable={true}
                     onNodeClick={(event, node) => console.log(node)}
                     layout={{ type: 'HierarchicalTree', direction: 'LR', nodeSpacing: 100, edgeSpacing: 100, levelSeparation: 200 }}

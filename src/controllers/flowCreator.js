@@ -165,7 +165,7 @@ export class FlowCreator {
 
         // Create edges with init node for each service
         for (let i = 0; i < this.nodes.length; i++) {
-            if (this.nodes[i].id.indexOf('_') !== -1) {
+            if (this.nodes[i].id.indexOf('_') !== -1 || this.nodes[i].id === 'init') {
                 //console.log(`Skipping ${this.nodes[i].id}`);
                 continue;
             }
@@ -210,8 +210,8 @@ export class FlowCreator {
     getLayoutedElements(nodes, edges, direction = 'TB') {
         const dagreGraph = new dagre.graphlib.Graph();
         dagreGraph.setDefaultEdgeLabel(() => ({}));
-        const nodeWidth = 172;
-        const nodeHeight = 64;
+        const nodeWidth = 128;
+        const nodeHeight = 128;
 
         const isHorizontal = direction === 'LR';
         dagreGraph.setGraph({ rankdir: direction });

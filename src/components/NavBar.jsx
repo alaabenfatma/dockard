@@ -16,10 +16,11 @@ import React from 'react'
 import { AppBar, Toolbar, Typography, Button, IconButton } from '@mui/material'
 export default function NavBar() {
     return (
-        <AppBar position="inherit"
+        <AppBar 
             style={{
-                marginBottom: '0.25rem',
+                position: 'absolute',
                 backgroundColor: '#4d79ff',
+                height: 'auto'
             }}>
             <Toolbar style={{
                 flex: 1,

@@ -12,9 +12,12 @@ import NavBar from './components/NavBar';
 function App() {
   return (
     <div className="App">
-      <header>
         <NavBar />
-        <div style={{
+       
+      <div style={{
+        height: '100%',
+        overflow: 'hidden',
+        top: "128px",
         }}>
           <Router>
             <Routes>
@@ -25,8 +28,6 @@ function App() {
             </Routes>
           </Router>
         </div>
-      </header>
-
     </div>
   );
 }
