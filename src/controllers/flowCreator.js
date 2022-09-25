@@ -1,4 +1,4 @@
-// import mui icons
+import dagre from 'dagre';
 export class FlowCreator {
     constructor(json_data) {
         this.json_data = json_data;
@@ -38,7 +38,7 @@ export class FlowCreator {
             id: 'init',
             sourcePosition: 'right',
             data: { label: 'docker-compose' },
-            position: { x: 0, y: num_services * 50 + 50 },
+
         };
         this.nodes.push(init_node);
         // Create a node for each service
@@ -82,7 +82,7 @@ export class FlowCreator {
                                 <div><strong>{id}</strong></div></p>
                         </span>
                 },
-                position: { x: 200, y: this.nodes.length * 100 },
+
 
                 style: this._nodeStyle('#add2ecc2'),
             };
@@ -106,10 +106,7 @@ export class FlowCreator {
                             </>
                     },
 
-                    position: {
-                        x: thisNodesPosition.x + 200,
-                        y: thisNodesPosition.y,
-                    },
+
                     style: this._nodeStyle('#b9defcc2'),
                 };
                 this.nodes.push(ports_node);
@@ -138,7 +135,7 @@ export class FlowCreator {
                     },
                     variables: environment,
                     style: this._nodeStyle('#b9defcc2'),
-                    position: { x: thisNodesPosition.x + 200, y: thisNodesPosition.y + 100 },
+
 
                 };
                 this.nodes.push(environment_node);
@@ -215,4 +212,39 @@ export class FlowCreator {
         };
         return node;
     }
+
+    getLayoutedElements(nodes, edges, direction = 'TB') {
+        const dagreGraph = new dagre.graphlib.Graph();
+        dagreGraph.setDefaultEdgeLabel(() => ({}));
+        const nodeWidth = 172;
+        const nodeHeight = 64;
+
+        const isHorizontal = direction === 'LR';
+        dagreGraph.setGraph({ rankdir: direction });
+
+        nodes.forEach((node) => {
+            dagreGraph.setNode(node.id, { width: nodeWidth, height: nodeHeight });
+        });
+
+        edges.forEach((edge) => {
+            dagreGraph.setEdge(edge.source, edge.target);
+        });
+
+        dagre.layout(dagreGraph);
+
+        nodes.forEach((node) => {
+            const nodeWithPosition = dagreGraph.node(node.id);
+            node.targetPosition = isHorizontal ? 'left' : 'top';
+            node.sourcePosition = isHorizontal ? 'right' : 'bottom';
+
+            node.position = {
+                x: nodeWithPosition.x - nodeWidth / 2,
+                y: nodeWithPosition.y - nodeHeight / 2,
+            };
+
+            return node;
+        });
+
+        return { nodes, edges };
+    };
 }
