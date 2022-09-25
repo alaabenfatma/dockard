@@ -73,10 +73,9 @@ export default function Main() {
             <div style={{
                 width: "100%",
                 height: "100%",
-                overflow: "auto",
             }}>
                 <Editor
-                    height="100vh"
+                    height="100%"
                     width={"100%"}
                     defaultLanguage="yaml"
                     defaultValue={code}
@@ -86,7 +85,7 @@ export default function Main() {
                     }}
                 />
             </div>
-            <div style={{ width: '100%', height: '100vh' }}>
+            <div style={{ width: '100%', height: '100%' }}>
                 <ReactFlow
                     nodes={nodes}
                     edges={edges}
@@ -95,7 +94,7 @@ export default function Main() {
                     onConnect={onConnect}
                     fitView={true}
                     attributionPosition="bottom-left"
-                    style={{ width: '100%', height: '100vh' }}
+                    style={{ width: '100%', height: '100%' }}
                     nodesDraggable={true}
                     onNodeClick={(event, node) => console.log(node)}
                 >
