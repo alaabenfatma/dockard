@@ -87,10 +87,6 @@ export class FlowCreator {
                 style: this._nodeStyle('#add2ecc2'),
             };
             this.nodes.push(node);
-            let thisNodesPosition = {
-                x: 200,
-                y: this.nodes.length * 100,
-            }
 
             // Create 'ports' node
             if (ports !== undefined && ports !== null && ports.length > 0) {
@@ -117,7 +113,6 @@ export class FlowCreator {
                 });
             }
 
-            // Create 'environment' node: A simple green node showing the count of environment variables
 
             // Convert environment variables to an array
             if (environment !== undefined && environment !== null) {
@@ -158,7 +153,7 @@ export class FlowCreator {
                         animated: true,
                         style: { stroke: '#03d1f5c2' },
                         markerEnd: { type: 'arrow', color: '#03d1f5c2' },
-                        label: 'depends_on',
+                        label: `'${id}' depends on '${dependency}'`,
                         sourceHandle: 'right',
                     });
                 });
@@ -177,7 +172,6 @@ export class FlowCreator {
             let edge = {
                 id: 'init-' + this.nodes[i].id,
                 source: 'init',
-                type: 'smoothstep',
                 target: this.nodes[i].id,
                 animated: false,
             };

@@ -7,7 +7,21 @@ import yaml from 'js-yaml';
 import { FlowCreator } from '../controllers/flowCreator';
 
 export default function Main() {
-    const [code, setCode] = useState("# Input your docker-compose file here");
+    const [code, setCode] = useState(`# Input your docker-compose file here
+version: '3.8'
+services:
+    web-nodejs:
+        image: nodejs
+        ports:
+            - 80:80
+        
+    db:
+        image: postgres
+        ports:
+            - 5432:5432
+        depends_on:
+            - web
+    `);
     const [flowCreatorInstance, setFlowCreatorInstance] = useState(new FlowCreator());
 
     const [nodes, setNodes, onNodesChange] = useNodesState([]);
@@ -48,8 +62,9 @@ export default function Main() {
             }
 
             if (data) {
-                setNodes(data.nodes);
-                setEdges(data.edges);
+                let layoutedElements = flowCreatorInstance.getLayoutedElements(data.nodes, data.edges, 'LR');
+                setNodes(layoutedElements.nodes);
+                setEdges(layoutedElements.edges);
             }
             else {
                 setNodes([
@@ -84,6 +99,7 @@ export default function Main() {
                         setCode(value);
                     }}
                 />
+
             </div>
             <div style={{ width: '100%', height: '100%' }}>
                 <ReactFlow
@@ -97,6 +113,7 @@ export default function Main() {
                     style={{ width: '100%', height: '100%' }}
                     nodesDraggable={true}
                     onNodeClick={(event, node) => console.log(node)}
+                    layout={{ type: 'HierarchicalTree', direction: 'LR', nodeSpacing: 100, edgeSpacing: 100, levelSeparation: 200 }}
                 >
                     <MiniMap
                         nodeStrokeColor={(n) => {
