@@ -41,10 +41,12 @@ export default function NavBar() {
                             Home
                         </p>
                     </Button>
-                    <Button color="inherit" title="GitHub">
+                    <Button color="inherit" title="GitHub" href="https://github.com/alaabenfatma/dockard">
                         <p>Github</p>
                     </Button>
-                    <Button color="inherit">
+                    <Button color="inherit" onClick={() => {
+                        alert("Not implemented yet");
+                    }}>
                         <p>
                             Docker Image
                         </p></Button>
