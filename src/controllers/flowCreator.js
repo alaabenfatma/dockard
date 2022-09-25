@@ -77,7 +77,7 @@ export class FlowCreator {
                         <span style={{ alignItems: 'center' }}>
                             <p style={{
                                 position: 'relative',
-                            }}><img src="https://img.icons8.com/doodle/96/000000/docker.png"
+                            }}><img src="https://img.icons8.com/doodle/96/000000/docker.png" alt="docker container"
                                 style={{ width: "24px", height: "24px" }} />
                                 <div><strong>{id}</strong></div></p>
                         </span>
@@ -192,8 +192,8 @@ export class FlowCreator {
             data: {
                 label:
                     <>
-                        <img src="https://img.icons8.com/bubbles/100/000000/error.png"
-                            alt="error" width="64" height="64" />
+                        <img src="https://img.icons8.com/bubbles/100/000000/error.png" alt="error icon"
+                             width="64" height="64" />
                         <p>{message}</p>
                     </>
 
