@@ -1,5 +1,5 @@
 {
-  "name": "docker-compose-flow",
+  "name": "dockard",
   "version": "0.1.0",
   "private": true,
   "dependencies": {
