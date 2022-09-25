@@ -17,15 +17,12 @@ export class FlowCreator {
         };
     }
     createFlow() {
-        console.log(Object.keys(this.json_data));
         if (this.json_data === undefined || this.json_data === null
             || Object.keys(this.json_data).length === 0) {
             return null;
         }
         this.nodes = [];
         this.edges = [];
-        // Print type of json_data
-        console.log(typeof this.json_data);
         // Find the "services" node in the JSON data
         let services = this.json_data["services"];
         if (services === undefined || services === null) {
@@ -36,8 +33,6 @@ export class FlowCreator {
         let services_array = Object.values(services);
         // Count the number of services
         let num_services = Object.keys(services).length;
-        console.log("Number of services: " + num_services);
-
         // Create init node
         let init_node = {
             id: 'init',
@@ -71,7 +66,6 @@ export class FlowCreator {
             }
             catch (err) {
                 console.log(err);
-
                 return null;
             }
             let node = {
@@ -154,14 +148,12 @@ export class FlowCreator {
                     target: id + '_environment',
                 });
 
-                
+
             }
             // Create the dependency edges between the nodes
-            console.log(depends_on);
             if (depends_on !== undefined && depends_on !== null) {
                 let dependencies = Object.values(depends_on);
                 dependencies.forEach(dependency => {
-                    console.log(dependency);
                     this.edges.push({
                         id: id + '_' + dependency + '_edge',
                         source: id,
