@@ -14,13 +14,13 @@ services:
         image: nodejs
         ports:
             - 80:80
-        
+        depends_on:
+            - db      
     db:
         image: postgres
         ports:
             - 5432:5432
-        depends_on:
-            - web
+
     `);
     const [flowCreatorInstance, setFlowCreatorInstance] = useState(new FlowCreator());
 
