@@ -1,6 +1,12 @@
 # Dockard
 Dockard (**Dock**er C**ard**) is a web application that converts docker-compose YAML files into interactive diagram.
 
+![Dockard GIF](.github/assets/dockard.gif)
+
+---
+## 🎮 Demo
+You can try Dockard on [dockard.vercel.app](https://dockard.vercel.app/).
+
 ---
 ## ⚡ Installation
 The installation of Dockard is quite straightforward. Two methods exist:
