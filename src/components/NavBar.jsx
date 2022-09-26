@@ -50,7 +50,7 @@ export default function NavBar() {
                         <p>
                             Docker Image
                         </p></Button>
-                    <Button color="inherit">
+                    <Button color="inherit" href="/about">
                         <p>About
                         </p>
                     </Button>

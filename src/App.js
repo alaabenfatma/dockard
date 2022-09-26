@@ -8,6 +8,7 @@ import {
 
 import Main from './pages/main';
 import NotFound from './pages/NotFound';
+import About from './pages/About';
 import NavBar from './components/NavBar';
 function App() {
   return (
@@ -17,12 +18,11 @@ function App() {
       <div style={{
         height: '100%',
         overflow: 'hidden',
-        top: "128px",
         }}>
           <Router>
             <Routes>
               <Route path="/" element={<Main />} />
-
+              <Route path="/about" element={<About />} />
               {/* 404 */}
               <Route path="*" element={<NotFound />} />
             </Routes>
