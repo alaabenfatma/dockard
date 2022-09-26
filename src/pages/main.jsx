@@ -88,7 +88,7 @@ services:
             <div style={{
                 width: "100%",
                 height: "100%",
-                top: "65px",
+                top: "68px",
                 position: "absolute",
             }}>
                 <Editor
